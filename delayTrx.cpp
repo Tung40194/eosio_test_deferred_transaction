@@ -54,6 +54,7 @@ ACTION testdeferred::subtest(bool err, string mark) {
 	eosio::print(mark);
 	if (err) {
 		// expect program to stop here, silently in defered tx(subtest)
+		// todo: use checkstate() to check if this subtest() has been interrupted.
 		check(0==1, "cmp 0 and 1");
 	}
 	else {
@@ -73,5 +74,3 @@ ACTION testdeferred::checkstate() {
 	//reset
 	state_table.set(state{false}, _self);
 }
-
-//EOSIO_ABI_CUSTOM(testung, (test)(subtest))
