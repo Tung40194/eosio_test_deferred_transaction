@@ -20,3 +20,9 @@ Result:
 
 - deferred 10 secs, and the sent deferred action is deteemined to have mistakes.
  -> checkstate() always returns false as deferred transaction is silently dead inside the defer process.
+
+Conclusion:
+- A delayed transaction is as well the so called 'deferred transaction'.
+- Once the transaction 'destined' to happen has mistakes inside, it fails silently.
+- std::make_tuple is used to pack action's parameters, and it is strictly required to have parameter's type matched.
+- Warnings/error messages that guide developers to debug are pointless in deferered/delayed action (which will be a silently dead deferred transaction).
