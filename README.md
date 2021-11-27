@@ -1,12 +1,13 @@
 # test_deferred_transaction
 
-This is made to test deferred transaction in EOS
+This is for testing deferred transaction in EOS
 
 To start a deferred transaction:
 `cleos --verbose push action account test '[false, 10]' -p actor`
- 
- + false(or true): decide that the deferred action will NOT have mistakes inside
- + 10: seconds to be deferred (delayed)
+
+ - parameters:
+  + false(or true): deferred transaction will NOT have mistakes inside
+  + 10: seconds to be deferred (delayed)
 
 
 To check the deferred transaction:
