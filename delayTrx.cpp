@@ -17,8 +17,11 @@ public:
         }
 
     ACTION initstate();
-    ACTION test(bool will_error_be_in_deferred_tx, uint64_t delay_in_sec);
-    //the action to be deferred
+    // test if the deferred TX has mistake inside
+    ACTION testdefer(bool will_error_be_in_deferred_tx, uint64_t delay_in_sec);
+    // test if the inline TX has mistake inside
+    ACTION testinline(bool will_error_be_in_deferred_tx);
+    //the action to be deferred/inlined
     ACTION subtest(bool err, string mark);
     ACTION checkstate();
 
@@ -37,7 +40,8 @@ ACTION testdeferred::initstate() {
 	state_table.set(state{true}, _self);
 }
 
-ACTION testdeferred::test(bool will_error_be_in_deferred_tx, uint64_t delay_in_sec) {
+// test if defered TX has mistake inside
+ACTION testdeferred::testdefer(bool will_error_be_in_deferred_tx, uint64_t delay_in_sec) {
 	eosio::transaction autoExec;
 
 	//std::make_tuple has a very strict way in taking in parameters, make sure parameters' types match
@@ -50,11 +54,20 @@ ACTION testdeferred::test(bool will_error_be_in_deferred_tx, uint64_t delay_in_s
     	autoExec.send(_self.value, _self, true);
 }
 
+ACTION testdeferred::testinline(bool will_error_be_in_deferred_tx) {
+        bool err = will_error_be_in_deferred_tx;
+        std::string mark = ">>>running subtest\n";
+
+        action(permission_level{_self, "active"_n},
+                        _self,
+                        "subtest"_n,
+                        std::make_tuple(err, mark)).send();
+}
+
 ACTION testdeferred::subtest(bool err, string mark) {
 	eosio::print(mark);
 	if (err) {
 		// expect program to stop here, silently in defered tx(subtest)
-		// todo: use checkstate() to check if this subtest() has been interrupted.
 		check(0==1, "cmp 0 and 1");
 	}
 	else {
