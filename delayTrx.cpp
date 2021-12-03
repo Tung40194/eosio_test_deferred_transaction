@@ -20,7 +20,7 @@ public:
     // test if the deferred TX has mistake inside
     ACTION testdefer(bool will_error_be_in_deferred_tx, uint64_t delay_in_sec);
     // test if the inline TX has mistake inside
-    ACTION testinline(bool will_error_be_in_deferred_tx);
+    ACTION testinline(bool will_error_be_in_inline_tx);
     //the action to be deferred/inlined
     ACTION subtest(bool err, string mark);
     ACTION checkstate();
@@ -54,8 +54,8 @@ ACTION testdeferred::testdefer(bool will_error_be_in_deferred_tx, uint64_t delay
     	autoExec.send(_self.value, _self, true);
 }
 
-ACTION testdeferred::testinline(bool will_error_be_in_deferred_tx) {
-        bool err = will_error_be_in_deferred_tx;
+ACTION testdeferred::testinline(bool will_error_be_in_inline_tx) {
+        bool err = will_error_be_in_inline_tx;
         std::string mark = ">>>running subtest\n";
 
         action(permission_level{_self, "active"_n},
